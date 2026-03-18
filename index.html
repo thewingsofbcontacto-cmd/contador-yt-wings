@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>BTS - MV</title>
+
+<link rel="icon" href="icono.jpg" sizes="32x32">
+<link rel="icon" href="icono.jpg" sizes="192x192">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #8C58D5;
+    color: white;
+    text-align: center;
+}
+
+header {
+    background: #7132CA;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+select {
+    padding: 8px;
+    font-size: 15px;
+    margin: 20px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+}
+
+#contenedorVideos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+.card {
+    background: #A584DA;
+    border-radius: 8px;
+    padding: 6px;
+    width: 290px;
+    box-shadow: 0 0 8px rgba(181, 126, 220, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card h2 {
+    font-size: 13px;
+    color: white;
+    margin: 4px 0;
+}
+
+iframe {
+    width: 100%;
+    height: 110px;
+    border: none;
+    border-radius: 6px;
+}
+
+button {
+    background: #6A0DAD;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 20px;
+    font-size: 14px;
+}
+
+button:hover {
+    background: #8A2BE2;
+}
+</style>
+</head>
+<body>
+
+<header>
+💜 BTS - Visitas en YT 💜
+</header>
+
+<select id="selectorAño">
+    <option value="">Selecciona un año</option>
+</select>
+
+<div id="contenedorVideos"></div>
+<button id="btnVerMas" style="display:none;">Ver más</button>
+
+<script>
+
+const videosBTS = {
+    "2013": [
+        { titulo: "No More Dream", id: "rBG5L7UsUxA" },
+        { titulo: "We Are Bulletproof Pt.2", id: "gqhWHy0rrtM" },
+        { titulo: "BTS (방탄소년단) 'N.O'", id: "r5GaAEHvHj0" }
+    ],
+    "2014": [
+        { titulo: "Boy In Luv", id: "LHHjp3IMjMk" },
+        { titulo: "Danger", id: "bagj78IQ3l0" },
+        { titulo: "War of Hormone", id: "XQmpVHUi-0A" },
+        { titulo: "Just One Day", id: "DTcKkcyS410" }
+    ],
+    "2015": [
+        { titulo: "BTS (방탄소년단) 가요대제전 Intro performance Trailer", id: "S1Up-ZzHmuw" },
+        { titulo: "I NEED U (Official MV)", id: "jjskoRh8GTE" },
+        { titulo: "DOPE", id: "BVwAVbKYYeM" },
+        { titulo: "RUN", id: "wKysONrSmew" }
+    ],
+    "2016": [
+        { titulo: "Blood Sweat & Tears", id: "hmE9f-TEutc" },
+        { titulo: "FIRE", id: "4ujQOR2DMFM" },
+        { titulo: "Save ME", id: "GZjt_sA2eso" }
+    ],
+    "2017": [
+        { titulo: "BTS (방탄소년단) '봄날 (Spring Day)'", id: "xEeFrLSkMm8" },
+        { titulo: "Not Today", id: "9DwzBICPhdM" },
+        { titulo: "DNA", id: "MBdVXkSdhwU" }
+    ],
+    "2018": [
+        { titulo: "j-hope 'Daydream (백일몽)", id: "OK3GJ0WIQ8s" },
+        { titulo: "Fake Love", id: "7C2z4GqqS5E" },
+        { titulo: "IDOL", id: "pBuZEGYXA6E" }
+    ],
+    "2019": [
+        { titulo: "BTS (방탄소년단) MAP OF THE SOUL : PERSONA 'Persona' Comeback Trailer", id: "M9Uy0opVF3s" },
+        { titulo: "Boy With Luv (feat. Halsey)", id: "XsX3ATc3FbA" },
+        { titulo: "Make It Right", id: "HhQymIsX3Lk" },
+        { titulo: "ON", id: "2Vv-BfVoq4g" }
+    ],
+    "2020": [
+        { titulo: "BTS (방탄소년단) 'ON'", id: "mPVDGOVjRQ0" },
+        { titulo: "Life Goes On", id: "xEeFrLSkMm8" }
+    ],
+    "2021": [
+        { titulo: "Dynamite", id: "gdZLi9oWNZg" },
+        { titulo: "Butter", id: "WMweEpGlu_U" },
+        { titulo: "Permission to Dance", id: "CuklIb9d3fI" }
+    ],
+    "2022": [
+        { titulo: "BTS (방탄소년단) 'Yet To Come (The Most Beautiful Moment)'", id: "kXpOEzNZ8hQ" }
+    ],
+    "2023": [
+        { titulo: "정국 (Jung Kook) 'Standing Next to You'", id: "UNo0TG9LwwI" }
+    ],
+    "2024": [
+        { titulo: "진 (Jin) 'I'll Be There'", id: "PWjZ3p1jNho" }
+    ],
+    "2025": [
+        { titulo: "j-hope ‘Sweet Dreams (feat. Miguel)’ ", id: "kW1e8NtdW90" }
+    ],
+    "2026": [
+        { titulo: "BTS (방탄소년단) ‘SWIM’ Official Teaser 1", id: "GuPhSLBYOeg" }
+    ]
+};
+
+const selector = document.getElementById("selectorAño");
+const contenedor = document.getElementById("contenedorVideos");
+const btnVerMas = document.getElementById("btnVerMas");
+
+let videosActuales = [];
+let indiceActual = 0;
+const cantidadPorCarga = 12;
+
+// Generar años
+for (let año = 2013; año <= 2026; año++) {
+    const option = document.createElement("option");
+    option.value = año;
+    option.textContent = año;
+    selector.appendChild(option);
+}
+
+selector.addEventListener("change", function() {
+    contenedor.innerHTML = "";
+    indiceActual = 0;
+    videosActuales = videosBTS[this.value] || [];
+    if (videosActuales.length > 0) {
+    mostrarMasVideos();
+       if (videosActuales.length > cantidadPorCarga) {
+        btnVerMas.style.display = "inline-block";
+       } else {
+        btnVerMas.style.display = "none";
+    }
+    } else {
+        contenedor.innerHTML = "<p>No hay videos registrados para este año</p>";
+        btnVerMas.style.display = "none";
+    }
+});
+
+btnVerMas.addEventListener("click", mostrarMasVideos);
+
+function mostrarMasVideos() {
+    const siguientes = videosActuales.slice(indiceActual, indiceActual + cantidadPorCarga);
+    siguientes.forEach(video => {
+        const card = document.createElement("div");
+        card.className = "card";
+        const titulo = document.createElement("h2");
+        titulo.textContent = video.titulo;
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://socialcounts.org/youtube-video-live-view-count/${video.id}/embed`;
+        card.appendChild(titulo);
+        card.appendChild(iframe);
+        contenedor.appendChild(card);
+    });
+    indiceActual += cantidadPorCarga;
+    if (indiceActual >= videosActuales.length) {
+        btnVerMas.style.display = "none";
+    }
+}
+    
+</script>
+</body>
+</html>
